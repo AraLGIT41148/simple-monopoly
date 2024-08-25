@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Monopoly</title>
+    <!-- Link to the external CSS file -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Display the current player's turn with an emoji -->
+    <p><span id="plyTurn_Show">Player 😄</span> Turn</p>
+
+    <!-- Display the result of the dice roll -->
+    <p id="RN">🎲 random number</p>
+
+    <!-- Button to trigger the dice roll function -->
+    <button onclick="rollDice()">🎲 Throw Dice</button>
+    
+    <!-- Layout of the game board, divided into columns -->
+    <div class="container">
+        <div class="column">
+            <p id="8">⚫</p>
+            <p id="7">⚫</p>
+            <p id="6">⚫</p>
+            <p id="5">⚫</p>
+            <p id="4">⚫</p>
+            <p id="3">⚫</p>
+        </div>
+        <div class="column">
+            <p id="9">⚫</p>
+            <p>🔲</p> <!-- Empty cell -->
+            <p>🔲</p> <!-- Empty cell -->
+            <p>🔲</p> <!-- Empty cell -->
+            <p>🔲</p> <!-- Empty cell -->
+            <p id="2">⚫</p>
+        </div>
+        <div class="column">
+            <p id="10">⚫</p>
+            <p>🔲</p> <!-- Empty cell -->
+            <p>🔲</p> <!-- Empty cell -->
+            <p>🔲</p> <!-- Empty cell -->
+            <p>🔲</p> <!-- Empty cell -->
+            <p id="1">⚫</p>
+        </div>
+        <div class="column">
+            <p id="11">⚫</p>
+            <p id="12">⚫</p>
+            <p id="13">⚫</p>
+            <p id="14">⚫</p>
+            <p id="15">⚫</p>
+            <p id="0">🫂</p> <!-- Starting position (initially occupied) -->
+        </div>
+    </div>
+
+    <!-- Display money for both players and the deal button -->
+    <p>
+        Player1 Money: <span id="moneyofPlayer1">300</span>$ ||||||| 
+        Player2 Money: <span id="moneyofPlayer2">300</span>$
+    </p>
+
+    <!-- Button to show the deal options -->
+    <button onclick="showDealOptions()">💵 Deal</button>
+    <br>
+    
+    <!-- Deal options (hidden by default) -->
+    <div id="DSH" class="hidden">
+        <!-- Buttons to adjust the amount of money for the deal -->
+        <button onclick="changeAmount(-1)">➖</button>
+        <button onclick="changeAmount(1)">➕</button>
+        <br>
+        <!-- Display the current amount for the deal -->
+        <p id="N_amount">0</p>
+        <!-- Button to finalize the deposit -->
+        <button onclick="deposit()">💰 Deposit</button>
+    </div>
+
+    <!-- Link to the external JavaScript file -->
+    <script src="script.js"></script>
+</body>
+</html>

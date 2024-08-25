@@ -1,0 +1,15 @@
+/* Container styles for the game board layout */
+.container {
+    display: flex;
+    justify-content: left;
+}
+
+/* Styles for columns in the game board with spacing */
+.column {
+    margin-right: 25px;
+}
+
+/* Class to hide elements (initially hidden) */
+.hidden {
+    display: none;
+}

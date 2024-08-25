@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>simple Monopoly</title>
+    <style>
+        /* Container to hold game board columns and align them */
+        .container {
+            display: flex;
+            justify-content: left;
+        }
+        /* Margin-right to create space between columns */
+        .column {
+            margin-right: 25px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Display current player turn -->
+    <p><span id="plyTurn_Show">Player 😄</span> Turn</p>
+    <!-- Display the result of the dice throw -->
+    <p id="RN">🎲 random number</p>
+    <!-- Button to throw the dice, which calls the `cl` function on double click -->
+    <button ondblclick="cl()">🎲 Throw Dice (double click)</button>
+    
+    <!-- Grid layout for the game board -->
+    <div class="container">
+        <!-- Column 1 of the game board -->
+        <div class="column">
+            <p id="8">⚫</p>
+            <p id="7">⚫</p>
+            <p id="6">⚫</p>
+            <p id="5">⚫</p>
+            <p id="4">⚫</p>
+            <p id="3">⚫</p>
+        </div>
+        <!-- Column 2 of the game board -->
+        <div class="column">
+            <p id="9">⚫</p>
+            <p>🔲</p>
+            <p>🔲</p>
+            <p>🔲</p>
+            <p>🔲</p>
+            <p id="2">⚫</p>
+        </div>
+        <!-- Column 3 of the game board -->
+        <div class="column">
+            <p id="10">⚫</p>
+            <p>🔲</p>
+            <p>🔲</p>
+            <p>🔲</p>
+            <p>🔲</p>
+            <p id="1">⚫</p>
+        </div>
+        <!-- Column 4 of the game board -->
+        <div>
+            <p id="11">⚫</p>
+            <p id="12">⚫</p>
+            <p id="13">⚫</p>
+            <p id="14">⚫</p>
+            <p id="15">⚫</p>
+            <p id="0">🫂</p>
+        </div>
+    </div>
+
+    <!-- Display money for each player -->
+    <p>
+        Player1 Money: <span id="moneyofPlayer1">300</span>$ ||||||| 
+        Player2 Money: <span id="moneyofPlayer2">300</span>$
+    </p>
+    <!-- Button to show the dealing section -->
+    <button onclick="Dealing()">💵 Deal</button>
+    <br>
+    
+    <!-- Hidden section for dealing money between players -->
+    <div id="DSH" style="display: none;">
+        <!-- Button to decrease the deposit amount -->
+        <button onclick="deC()">➖</button>
+        <!-- Button to increase the deposit amount -->
+        <button onclick="inC()">➕</button>
+        <br>
+        <!-- Display the current amount to be deposited -->
+        <p id="N_amount">0</p>
+        <!-- Button to confirm the deposit action -->
+        <button onclick="deposit()">💰 Deposit</button>
+    </div>
+
+    <script>
+        // Define player objects with their properties
+        let ply1 = { Appearance: "😄", b: 0, Turn: true, Money: 300 }; // Player 1
+        let ply2 = { Appearance: "😊", b: 0, Turn: false, Money: 300 }; // Player 2
+        let plys = [ply1, ply2]; // Array of players
+
+        // Function to handle dice throw and update the game board
+        function cl() {
+            let rand = Math.random(); // Generate a random number between 0 and 1
+            let a = Math.floor((rand * 6) + 1); // Scale to a number between 1 and 6
+            document.getElementById("RN").innerHTML = "dice was: " + a; // Show dice result
+            
+            for (let i = 0; i <= 1; i++) {
+                if (plys[i].Turn) { // Check if it's the current player's turn
+                    console.log(i); // Log current player index
+                    console.log(plys[i]); // Log current player data
+                    plys[i].b = a + plys[i].b; // Update player's position
+                    
+                    // If the player's position is greater than or equal to 16, wrap around
+                    if (plys[i].b >= 16) {
+                        if ((plys[i].b - a) === plys[-i + 1].b) {
+                            document.getElementById(plys[i].b - a).innerHTML = plys[-i + 1].Appearance; // Update cell with the opponent's appearance
+                            console.log(plys[i].b);
+                        } else {
+                            document.getElementById(plys[i].b - a).innerHTML = "⚫"; // Update cell to empty
+                            console.log(plys[i].b);
+                        }
+                        plys[i].b = plys[i].b - 16; // Wrap position within the board
+                        document.getElementById(plys[i].b).innerHTML = plys[i].Appearance; // Update the new position with current player's appearance
+                    } else {
+                        if ((plys[i].b - a) === plys[-i + 1].b) {
+                            document.getElementById(plys[i].b - a).innerHTML = plys[-i + 1].Appearance; // Update cell with the opponent's appearance
+                            console.log(plys[i].b);
+                        } else {
+                            document.getElementById(plys[i].b - a).innerHTML = "⚫"; // Update cell to empty
+                            console.log(plys[i].b);
+                        }
+                        document.getElementById(plys[i].b).innerHTML = plys[i].Appearance; // Update the new position with current player's appearance
+                    }
+                    
+                    // If the player lands on the opponent's position, update it to show the player icon
+                    if (plys[i].b === plys[-i + 1].b) {
+                        document.getElementById(ply1.b).innerHTML = "🫂";
+                    }
+                    
+                    // Update the turn indicator to the next player
+                    document.getElementById("plyTurn_Show").innerHTML = "Player " + plys[-i + 1].Appearance;
+                    plys[i].Turn = false; // End the current player's turn
+                    return plys[-i + 1].Turn = true; // Start the next player's turn
+                }
+            }
+        }
+
+        let amount = 0; // Variable to keep track of deposit amount
+
+        // Function to display the dealing section
+        function Dealing() {
+            document.getElementById("DSH").setAttribute("style", "display: block;"); // Show the dealing section
+        }
+
+        // Function to increase the deposit amount
+        function inC() {
+            for (let i = 0; i <= 1; i++) {
+                if (plys[i].Turn && amount < plys[i].Money) { // Ensure it's the current player's turn and they have enough money
+                    amount += 1; // Increase the deposit amount
+                    document.getElementById("N_amount").innerHTML = amount; // Update the display
+                }
+            }
+        }
+
+        // Function to decrease the deposit amount
+        function deC() {
+            if (amount > 0) { // Ensure the deposit amount is greater than 0
+                amount -= 1; // Decrease the deposit amount
+                document.getElementById("N_amount").innerHTML = amount; // Update the display
+            }
+        }
+
+        // Function to deposit the amount from one player to another
+        function deposit() {
+            for (let i = 0; i <= 1; i++) {
+                if (plys[i].Turn) { // Ensure it's the current player's turn
+                    plys[i].Money -= amount; // Deduct the deposit amount from the current player's money
+                    plys[-i + 1].Money += amount; // Add the deposit amount to the opponent's money
+                    
+                    // If the current player runs out of money, set it to 0 and adjust the opponent's money
+                    if (plys[i].Money < 0) {
+                        plys[i].Money = 0;
+                        plys[-i + 1].Money += plys[i].Money; // Add the deficit to the opponent's money
+                    }
+                }
+            }
+            // Update the money display for both players
+            document.getElementById("moneyofPlayer1").innerHTML = ply1.Money;
+            document.getElementById("moneyofPlayer2").innerHTML = ply2.Money;
+            amount = 0; // Reset the deposit amount
+            document.getElementById("N_amount").innerHTML = amount; // Update the display
+            document.getElementById("DSH").setAttribute("style", "display: none;"); // Hide the dealing section
+        }
+    </script>
+</body>
+</html>
